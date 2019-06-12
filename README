@@ -1,0 +1,30 @@
+This script calculates free energy perturbation (FEP) corrections 
+to a free energy surface from Metadynamics simulation (MetaD) 
+along a collective variable (CV) using a weighted histogram accounting 
+for the potential energy difference between two reference Hamiltonians.
+
+HOWTO
+
+1) Run a MetaD simulation using a low-level potential (U_LL), e.g. semiepirical or DFTB and reach convergence
+
+2) Remove first transitent from the simulation 
+
+3) Extract a selected number of configurations from the original trajectory
+
+4) Calculate the energy only of these configurations using a high-level potential (U_HL)
+ 
+5) Prepare a new COLVAR file with the following columns
+   ____________________________________________________
+   Time       CV      metad.rbias      U_LL     U_HL
+   ...
+   ...
+   ____________________________________________________
+  
+   Make sure that COLVAR is aligned, i.e. each CV, bias, U_LL, and U_HL 
+   correspond to the same structure
+
+6) Run metaFEP_histo_rew.py
+
+7) This will produce the file MetaFEP.dat containing the FEP free energy along 
+   the CV smoothed using a moving average filter and relative 95% confidence 
+   lower and upper bounds. Raw FEP data also available in last column (noisy)
